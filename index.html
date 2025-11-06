@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>작은 행동의 심리학 — 마음이 바꾸는 지구</title>
+
+<!-- 웹폰트 (둥근 고딕 계열 느낌) -->
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ivory: #F7F4EE;
+    --pastel-blue: #C7E7FF;
+    --muted-blue: #9CC8E7;
+    --accent: #6AA6D6;
+    --text: #2C3A3A;
+    --card: #ffffff;
+    --glass: rgba(255,255,255,0.7);
+    --radius: 14px;
+    --shadow: 0 6px 18px rgba(38,50,56,0.08);
+    --max-width: 1100px;
+  }
+
+  /* 기본 리셋 */
+  *{box-sizing: border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: "Noto Sans KR", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background: linear-gradient(180deg, var(--ivory) 0%, #F2F7FB 100%);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
+    line-height:1.55;
+    scroll-behavior:smooth;
+  }
+
+  /* 전체 레이아웃 */
+  .container{
+    max-width:var(--max-width);
+    margin:0 auto;
+    padding:40px 20px;
+  }
+
+  /* 네비게이션 */
+  header{
+    position:fixed;
+    left:0; right:0;
+    top:16px;
+    display:flex;
+    justify-content:center;
+    z-index:40;
+    pointer-events:none;
+  }
+  nav{
+    pointer-events:all;
+    background:rgba(255,255,255,0.7);
+    backdrop-filter: blur(6px);
+    border-radius:999px;
+    padding:8px 14px;
+    box-shadow:var(--shadow);
+    display:flex;
+    gap:8px;
+    align-items:center;
+  }
+  nav a{
+    text-decoration:none;
+    color:var(--text);
+    font-weight:600;
+    padding:8px 12px;
+    border-radius:999px;
+  }
+  nav a:hover, nav a:focus{
+    background:var(--pastel-blue);
+    outline:none;
+  }
+
+  /* 섹션 공통 */
+  section.full{
+    min-height:100vh;
+    display:grid;
+    grid-template-columns:1fr;
+    align-items:center;
+    padding:80px 0;
+    width:100%;
+  }
+
+  /* Hero */
+  .hero{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding: 60px 20px;
+  }
+  .hero .card{
+    background: linear-gradient(180deg, rgba(255,255,255,0.85), rgba(255,255,255,0.9));
+    border-radius:24px;
+    padding:48px;
+    box-shadow:var(--shadow);
+    max-width:980px;
+    width:100%;
+    backdrop-filter: blur(4px);
+  }
+  .title{
+    font-size:clamp(26px, 4vw, 44px);
+    line-height:1.05;
+    margin:0 0 12px 0;
+    color:var(--text);
+  }
+  .subtitle{
+    margin:0;
+    font-size:clamp(14px, 1.6vw, 18px);
+    color:#3b5258;
+  }
+  .hero-cta{
+    margin-top:18px;
+    display:flex;
+    gap:12px;
+    justify-content:center;
+    flex-wrap:wrap;
+  }
+  .btn{
+    padding:10px 16px;
+    border-radius:999px;
+    border:0;
+    cursor:pointer;
+    font-weight:700;
+    background:var(--accent);
+    color:white;
+    box-shadow: 0 8px 20px rgba(106,166,214,0.18);
+  }
+  .btn.secondary{
+    background:transparent;
+    color:var(--text);
+    border:2px solid rgba(0,0,0,0.05);
+  }
+
+  /* 2-column layout for about & campaigns */
+  .two-col{
+    display:grid;
+    grid-template-columns: 1fr 430px;
+    gap:28px;
+    align-items:start;
+  }
+  @media (max-width:980px){
+    .two-col{grid-template-columns:1fr; padding:0 12px}
+  }
+
+  /* 카드 스타일 */
+  .card-small{
+    background:var(--card);
+    border-radius:16px;
+    padding:18px;
+    box-shadow:var(--shadow);
+  }
+
+  /* 심리 카드 리스트 */
+  .psych-grid{
+    display:grid;
+    gap:12px;
+    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+  }
+
+  .psych-item{
+    padding:14px;
+    border-radius:12px;
+    background:linear-gradient(180deg, rgba(199,231,255,0.25), rgba(255,255,255,0.6));
+  }
+  .psych-item h4{margin:0 0 6px 0}
+  .psych-item p{margin:0;font-size:14px;color:#2f4b4b}
+
+  /* 캠페인 참여 섹션 */
+  .campaign{
+    display:flex;
+    flex-direction:column;
+    gap:14px;
+  }
+  .campaign form{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    margin-top:6px;
+    flex-wrap:wrap;
+  }
+  input[type="text"], select, textarea{
+    padding:10px 12px;
+    border-radius:10px;
+    border:1px solid rgba(0,0,0,0.06);
+    font-size:14px;
+    min-width:180px;
+  }
+  textarea{min-height:80px; resize:vertical;}
+  .small{
+    font-size:13px; color:#4b6466;
+  }
+
+  /* 참가 기록 목록 */
+  .records{
+    margin-top:10px;
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    max-height:260px;
+    overflow:auto;
+    padding-right:6px;
+  }
+  .record{
+    display:flex;
+    justify-content:space-between;
+    gap:10px;
+    align-items:center;
+    padding:10px;
+    background:var(--glass);
+    border-radius:10px;
+  }
+
+  /* 스토리 블로그형 */
+  .stories{
+    display:grid;
+    gap:16px;
+    grid-template-columns:repeat(auto-fit, minmax(260px,1fr));
+  }
+  .story{
+    padding:16px;
+    border-radius:12px;
+    background:linear-gradient(180deg,#fff, #F8FBFF);
+    box-shadow:var(--shadow);
+  }
+  .story h3{margin:0 0 6px 0}
+  .story p{margin:0 0 8px 0; color:#3b5356; font-size:14px}
+
+  /* 교육 섹션 (심리학 이론) */
+  .edu-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(220px,1fr));
+    gap:12px;
+  }
+
+  /* footer */
+  footer{
+    text-align:center;
+    padding:36px 12px;
+    color:#4a5a5a;
+  }
+
+  /* reveal animation */
+  .reveal{
+    opacity:0;
+    transform:translateY(18px) scale(0.995);
+    transition: all 700ms cubic-bezier(.2,.9,.3,1);
+  }
+  .reveal.visible{
+    opacity:1;
+    transform:none;
+  }
+
+  /* progress indicator on side */
+  .progress{
+    position:fixed;
+    right:14px;
+    top:50%;
+    transform:translateY(-50%);
+    background:rgba(255,255,255,0.8);
+    padding:8px;
+    border-radius:12px;
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+    z-index:40;
+  }
+  .progress .dot{width:10px;height:10px;border-radius:50%;background:#ddd}
+  .progress .dot.active{background:var(--accent)}
+
+  /* small utilities */
+  .muted{color:#627878}
+  .flex{display:flex;gap:10px;align-items:center}
+  .center{display:flex;justify-content:center;align-items:center}
+</style>
+</head>
+<body>
+
+<header>
+  <nav aria-label="페이지 내비게이션">
+    <a href="#home">홈</a>
+    <a href="#about">심리학 소개</a>
+    <a href="#campaigns">캠페인</a>
+    <a href="#stories">스토리</a>
+    <a href="#learn">학습</a>
+  </nav>
+</header>
+
+<!-- progress dots -->
+<div class="progress" aria-hidden="true">
+  <div class="dot" data-target="#home"></div>
+  <div class="dot" data-target="#about"></div>
+  <div class="dot" data-target="#campaigns"></div>
+  <div class="dot" data-target="#stories"></div>
+  <div class="dot" data-target="#learn"></div>
+</div>
+
+<!-- HERO -->
+<section id="home" class="full">
+  <div class="container hero reveal">
+    <div class="card">
+      <h1 class="title">작은 행동의 심리학<br><span style="color:var(--accent)">— 마음이 바꾸는 지구</span></h1>
+      <p class="subtitle">심리학의 원리를 통해 친환경 행동을 일상으로 연결하는 캠페인, 교육, 이야기들을 한 곳에 모았습니다.</p>
+
+      <div class="hero-cta">
+        <button class="btn" onclick="document.querySelector('#campaigns').scrollIntoView({behavior:'smooth'})">캠페인 참여하기</button>
+        <button class="btn secondary" onclick="document.querySelector('#about').scrollIntoView({behavior:'smooth'})">심리학 원리 보기</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT (심리 원리) -->
+<section id="about" class="full" aria-labelledby="about-title">
+  <div class="container reveal two-col">
+    <div>
+      <h2 id="about-title">심리학으로 본 환경 행동</h2>
+      <p class="muted">환경 행동을 방해하는 마음의 장벽을 이해하면, 더 효과적으로 행동 변화를 설계할 수 있습니다.</p>
+
+      <div class="psych-grid" style="margin-top:18px;">
+        <div class="psych-item card-small">
+          <h4>확증 편향</h4>
+          <p>사람들은 기존 신념에 맞는 정보만 받아들입니다. '내가 할 필요 없다'는 생각을 바꾸는 전략이 필요합니다.</p>
+        </div>
+        <div class="psych-item card-small">
+          <h4>인지 부조화</h4>
+          <p>환경 가치와 현실 행동 간 불일치를 경험하면 불편을 느낍니다. 작은 일부터 행동 일치를 지원합니다.</p>
+        </div>
+        <div class="psych-item card-small">
+          <h4>심리적 거리감</h4>
+          <p>문제가 '나'와 멀게 느껴지면 행동으로 옮기기 어렵습니다. 감정적 연결(스토리)이 중요합니다.</p>
+        </div>
+        <div class="psych-item card-small">
+          <h4>사회적 증거</h4>
+          <p>다른 사람이 하면 나도 하게 됩니다. 친구·지역 단위의 참여 유인책이 효과적입니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside>
+      <div class="card-small">
+        <h3>핵심 캠페인</h3>
+        <ol class="small">
+          <li><strong>나의 하루 한 행동</strong> – 자기효능감 강화</li>
+          <li><strong>친구와 같이 에코 포인트</strong> – 사회적 증거 활용</li>
+          <li><strong>지구에게 편지 쓰기</strong> – 감정 이입 유도</li>
+        </ol>
+        <p class="small muted" style="margin-top:8px">아래의 '캠페인' 섹션에서 직접 참여하고 기록하세요.</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- CAMPAIGNS (참여형) -->
+<section id="campaigns" class="full" aria-labelledby="camp-title">
+  <div class="container reveal">
+    <h2 id="camp-title">캠페인 참여하기</h2>
+    <p class="muted">작은 행동을 기록하고, 배지와 피드백을 받아보세요. 꾸준함이 변화를 만듭니다.</p>
+
+    <div class="campaign" style="margin-top:18px;">
+      <div class="card-small">
+        <strong>참여 양식</strong>
+        <form id="actionForm" onsubmit="submitAction(event)" aria-label="캠페인 참여 폼">
+          <input id="actName" type="text" placeholder="당신의 이름 (선택)" aria-label="이름 (선택)">
+          <select id="actType" aria-label="행동 유형">
+            <option value="recycle">분리수거/재활용</option>
+            <option value="reduce">일회용 줄이기</option>
+            <option value="transport">대중교통/도보/자전거</option>
+            <option value="energy">전기/에너지 절약</option>
+            <option value="other">기타</option>
+          </select>
+          <input id="actNote" type="text" placeholder="구체적 행동(예: 빨대 사용 안함)" required aria-required="true">
+          <button class="btn" type="submit">기록하기</button>
+        </form>
+        <p class="small muted" style="margin-top:10px">녹색 배지는 3회 기록 시 획득됩니다. 기록은 브라우저에 저장됩니다.</p>
+      </div>
+
+      <div class="card-small" aria-live="polite" id="feedbackArea" style="display:none;">
+        <strong>피드백</strong>
+        <p id="feedbackText" class="small"></p>
+      </div>
+
+      <div class="card-small">
+        <strong>내 기록</strong>
+        <div id="records" class="records" aria-live="polite"></div>
+      </div>
+
+      <div class="card-small">
+        <strong>참여 팁</strong>
+        <ul class="small">
+          <li>작은 행동이라도 매일 기록하면 습관이 됩니다.</li>
+          <li>친구를 초대해 함께 하면 더 오래 지속됩니다.</li>
+          <li>자기효능감을 느낄 수 있도록 성취를 표시해보세요.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORIES (블로그/스토리) -->
+<section id="stories" class="full" aria-labelledby="stories-title">
+  <div class="container reveal">
+    <h2 id="stories-title">작은 이야기들 — 에코 스토리</h2>
+    <p class="muted">사람들이 환경과 연결되며 겪은 작은 변화의 이야기입니다.</p>
+
+    <div style="margin-top:18px;" class="stories">
+      <!-- 예시 스토리들 -->
+      <article class="story">
+        <h3>한 주의 변화</h3>
+        <p>플라스틱 컵 대신 텀블러를 들고 다닌 지 한 달. 생각보다 마음이 가벼워졌어요.</p>
+        <p class="small muted">— 수연</p>
+      </article>
+
+      <article class="story">
+        <h3>함께한 동네 캠페인</h3>
+        <p>우리 동네 청소년들이 모여 쓰레기 줍기를 했습니다. 대화가 많이 생겼어요.</p>
+        <p class="small muted">— 민준</p>
+      </article>
+
+      <article class="story">
+        <h3>지구에게 쓴 편지</h3>
+        <p>“미안해. 그리고 고마워.”라고 쓴 뒤에 진짜 행동이 바뀌었습니다.</p>
+        <p class="small muted">— 수정</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- LEARN (교육 섹션) -->
+<section id="learn" class="full" aria-labelledby="learn-title">
+  <div class="container reveal two-col">
+    <div>
+      <h2 id="learn-title">심리학으로 배우는 환경 변화</h2>
+      <p class="muted">관련 이론과 실용 팁을 짧게 알려드립니다.</p>
+
+      <div style="margin-top:18px" class="edu-grid">
+        <div class="card-small">
+          <h4>인지 부조화</h4>
+          <p class="small">가치와 행동이 어긋날 때 불편함을 느끼죠. 작은 행동 일치부터 시작하세요.</p>
+        </div>
+        <div class="card-small">
+          <h4>행동 변화 단계</h4>
+          <p class="small">관심→준비→실행→유지의 단계로 나뉩니다. 각 단계에 맞춘 지원이 중요합니다.</p>
+        </div>
+        <div class="card-small">
+          <h4>자기결정이론</h4>
+          <p class="small">내적 동기(의미), 자율성, 유능감이 행동 지속에 영향을 줍니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <aside>
+      <div class="card-small">
+        <h3>7일 루틴 샘플</h3>
+        <ol class="small">
+          <li>1일 차: 텀블러 사용</li>
+          <li>2일 차: 장바구니 지참</li>
+          <li>3일 차: 대중교통 1회</li>
+          <li>... (계속)</li>
+        </ol>
+        <p class="small muted" style="margin-top:8px">작은 성공을 적어가며 자기효능감을 키워보세요.</p>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    © 2025 작은 행동의 심리학 — 마음이 바꾸는 지구 · 교육용 데모
+  </div>
+</footer>
+
+<script>
+/*
+  JS 기능:
+   - 페이지의 reveal 애니메이션 (IntersectionObserver)
+   - 캠페인 참여 폼(localStorage 저장)
+   - 배지 획득 로직(3회 -> 그린 배지)
+   - progress dot 활성화
+   - 간단한 피드백 메시지
+*/
+
+// Reveal on scroll
+(function(){
+  const io = new IntersectionObserver(entries=>{
+    for(const e of entries){
+      if(e.isIntersecting) e.target.classList.add('visible');
+    }
+  }, {threshold: 0.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+})();
+
+// Progress dots
+(function(){
+  const dots = document.querySelectorAll('.progress .dot');
+  const targets = Array.from(dots).map(d => document.querySelector(d.dataset.target));
+  function update(){
+    const scroll = window.scrollY + window.innerHeight/3;
+    targets.forEach((el, i) => {
+      if(!el) return;
+      const rect = el.getBoundingClientRect();
+      const top = window.scrollY + rect.top;
+      const bottom = top + rect.height;
+      if(scroll >= top && scroll < bottom){
+        dots.forEach(x=>x.classList.remove('active'));
+        dots[i].classList.add('active');
+      }
+    });
+  }
+  update();
+  window.addEventListener('scroll', update, {passive:true});
+})();
+
+// Campaign logic
+const STORAGE_KEY = 'eco_actions_v1';
+
+function getRecords(){
+  try{
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+  } catch(e){
+    console.error('localStorage read error', e);
+    return [];
+  }
+}
+
+function saveRecords(arr){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+  } catch(e){
+    console.error('localStorage write error', e);
+  }
+}
+
+function formatTime(ts){
+  const d = new Date(ts);
+  return d.toLocaleString();
+}
+
+function renderRecords(){
+  const container = document.getElementById('records');
+  container.innerHTML = '';
+  const recs = getRecords().slice().reverse(); // 최근 우선
+  if(recs.length === 0){
+    container.innerHTML = '<div class="small muted">아직 기록이 없습니다. 작은 행동을 기록해보세요!</div>';
+    return;
+  }
+  recs.forEach(r=>{
+    const div = document.createElement('div');
+    div.className = 'record';
+    div.innerHTML = `<div>
+        <strong>${r.name ? r.name : '익명'}</strong>
+        <div class="small muted">${r.type.replace(/^\w/,c=>c.toUpperCase())} · ${formatTime(r.t)}</div>
+        <div style="font-size:14px;margin-top:6px">${escapeHtml(r.note)}</div>
+      </div>
+      <div class="small muted">${r.badge ? '🏅' : ''}</div>`;
+    container.appendChild(div);
+  });
+}
+
+// escape to avoid injection in innerHTML
+function escapeHtml(s){
+  return String(s).replace(/[&<>"'`]/g, function(ch){
+    return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;', '`':'&#96;'})[ch];
+  });
+}
+
+function submitAction(e){
+  e.preventDefault();
+  const name = document.getElementById('actName').value.trim();
+  const type = document.getElementById('actType').value;
+  const note = document.getElementById('actNote').value.trim();
+  if(!note){
+    alert('구체적 행동을 입력해주세요.');
+    return;
+  }
+  const recs = getRecords();
+  const newRec = { name: name || null, type, note, t: Date.now(), badge: false };
+  recs.push(newRec);
+
+  // 배지 로직: 같은 '브라우저'에서 3회 이상 기록 시 badge 부여
+  const recentCount = recs.filter(r => r.type === type).length;
+  if(recentCount >= 3){
+    // mark unbadged items of that type as badge:true (simple behaviour)
+    for(let i=recs.length-1;i>=0 && recentCount>0;i--){
+      if(recs[i].type === type && !recs[i].badge){
+        recs[i].badge = true;
+      }
+    }
+  }
+
+  saveRecords(recs);
+  renderRecords();
+  showFeedback(newRec, recentCount);
+
+  // 클리어 폼 필드
+  document.getElementById('actNote').value = '';
+}
+
+// simple user feedback area
+function showFeedback(rec, count){
+  const area = document.getElementById('feedbackArea');
+  const text = document.getElementById('feedbackText');
+  area.style.display = 'block';
+  let msg = '';
+  if(rec.badge){
+    msg = `멋져요! '${rec.note}' 를 기록했어요. 같은 유형으로 ${count}회 기록되어 그린 배지를 획득했어요! 🏅`;
+  } else {
+    msg = `기록 완료: "${rec.note}". 같은 유형에 대해 ${count}/3회입니다. 꾸준히 기록해 배지를 받아보세요!`;
+  }
+  text.textContent = msg;
+
+  // 간단한 시각 피드백 애니메이션
+  area.animate([{transform:'translateY(-6px)', opacity:0},{transform:'translateY(0)', opacity:1}],{duration:380, easing:'cubic-bezier(.2,.9,.3,1')});
+}
+
+// 초기 로드
+document.addEventListener('DOMContentLoaded', ()=>{
+  renderRecords();
+  // 기본 피드백 숨기기
+  document.getElementById('feedbackArea').style.display = getRecords().length ? 'block' : 'none';
+
+  // a[href^="#"] 부드러운 스크롤(네비 링크)
+  document.querySelectorAll('a[href^="#"]').forEach(a=>{
+    a.addEventListener('click',(ev)=>{
+      const href = a.getAttribute('href');
+      if(href.length > 1){
+        ev.preventDefault();
+        document.querySelector(href).scrollIntoView({behavior:'smooth'});
+      }
+    });
+  });
+});
+</script>
+
+</body>
+</html>
